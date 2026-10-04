@@ -1,128 +1,132 @@
 ﻿# Sarbert Professionals
 
-Teaching marketplace platform that connects students with tutors/professionals. Students can post jobs, chat with tutors, manage bookings, and pay with coins; tutors build profiles and apply for work; admins manage the platform.
+Sarbert Professionals is a teaching marketplace where students can find tutors, post teaching jobs, chat, book sessions, and pay using coins. Tutors create profiles, apply for jobs, and manage their availability and wallet. Admins oversee the platform, including support and payments.
 
-## Stack
+The project has two main parts:
 
-| Layer | Tech |
-| --- | --- |
-| Frontend | React 18, React Router, Tailwind CSS, Zustand, Axios |
-| Backend | Spring Boot 3.2 (WebFlux), Spring Security, JWT |
-| Database | PostgreSQL (R2DBC) |
-| Payments | Paystack, M-Pesa |
-| Media | Cloudinary |
-| CI | GitHub Actions (Maven verify + client build) |
+- `client` — React frontend
+- `backend/teaching-marketplace` — Spring Boot API (Java 17, PostgreSQL)
 
-## Repository layout
-
-```
-├── client/                          # React frontend (Create React App)
-├── backend/teaching-marketplace/    # Spring Boot API
-├── .github/workflows/ci.yml         # CI pipeline
-└── IMPROVEMENT_PLAN.md              # Engineering notes
-```
+---
 
 ## Prerequisites
 
-- Node.js 18+ and npm
-- Java 17+
-- Maven 3.8+ (or use the included `mvnw`)
-- PostgreSQL 14+
-- (Optional) Docker — for backend integration tests and containerized API
+Before running the project, install:
 
-## Quick start
+- Node.js and npm
+- Java 17
+- Maven (or use the Maven wrapper in the backend folder)
+- PostgreSQL
 
-### 1. Database
+Create a PostgreSQL database named `teaching_marketplace` (or match the name in your backend config).
 
-Create a PostgreSQL database (default name used in docs: `teaching_marketplace`).
+---
 
-### 2. Backend
+## Backend setup
+
+### 1. Install dependencies
 
 ```bash
 cd backend/teaching-marketplace
+./mvnw dependency:resolve
 ```
 
-Copy variables from `env-config.txt` into your environment or a local `.env` / deployment config. Required areas:
+On Windows PowerShell:
 
-- Database (`DATASOURCE_*`)
-- JWT (`JWT_SECRET`)
-- Frontend URLs (`FRONT_END_URL`, verification/reset URLs)
-- Email (SMTP)
-- Cloudinary, Paystack, and M-Pesa credentials as needed
+```powershell
+cd backend/teaching-marketplace
+.\mvnw.cmd dependency:resolve
+```
 
-Run:
+### 2. Configure environment
+
+Copy the variables from `backend/teaching-marketplace/env-config.txt` into your environment (or a local env file used by your setup).
+
+You need at least:
+
+- Database URL, username, and password
+- JWT secret
+- Frontend URL
+- Email (SMTP) settings if you use verification/reset emails
+- Paystack, M-Pesa, and Cloudinary values if you use those features
+
+### 3. Run the backend
 
 ```bash
+cd backend/teaching-marketplace
 ./mvnw spring-boot:run
-# or with verbose logs:
-./mvnw spring-boot:run -Dspring-boot.run.profiles=dev
 ```
 
-API base (local): `http://localhost:8089/api/v1`  
-Health: Actuator `health` / `info` endpoints (as configured).
+On Windows PowerShell:
 
-Docker (from `backend/teaching-marketplace`):
-
-```bash
-docker build -t teaching-marketplace .
-docker run -p 8080:8080 --env-file .env teaching-marketplace
+```powershell
+cd backend/teaching-marketplace
+.\mvnw.cmd spring-boot:run
 ```
 
-### 3. Frontend
+The API runs on port `8089` by default:
+
+```text
+http://localhost:8089/api/v1
+```
+
+---
+
+## Frontend setup
+
+### 1. Install libraries
 
 ```bash
 cd client
-cp env-config.txt .env   # then edit values
 npm install
-npm start
 ```
 
-App runs at `http://localhost:3000` by default.
+### 2. Configure environment
 
-Key client env vars:
+Create a `.env` file in the `client` folder using the values from `client/env-config.txt`.
+
+Minimum example:
 
 ```env
 REACT_APP_API_BASE_URL=http://localhost:8089/api/v1
-REACT_APP_PAYSTACK_PUBLIC_KEY=pk_test_...
+REACT_APP_PAYSTACK_PUBLIC_KEY=your_paystack_public_key
+REACT_APP_APP_NAME=Teaching Marketplace
+REACT_APP_VERSION=1.0.0
 ```
 
-Production build:
+### 3. Run the frontend
+
+```bash
+cd client
+npm start
+```
+
+The app runs on:
+
+```text
+http://localhost:3000
+```
+
+### 4. Production build (optional)
 
 ```bash
 cd client
 npm run build
 ```
 
-## Roles & main features
+---
 
-- **Students** — post jobs, chat, book sessions, buy/spend coins, track success flows
-- **Tutors / professionals** — profiles, applications, availability, wallet
-- **Admins** — dashboard, support tickets, MFA-protected admin actions, payment ops
+## Suggested local order
 
-Also included: real-time chat (WebSocket), email verification, password reset, and support ticketing.
+1. Start PostgreSQL and make sure the database exists.
+2. Start the backend.
+3. Start the frontend.
+4. Open the frontend in your browser.
 
-## Tests
+---
 
-```bash
-# Backend
-cd backend/teaching-marketplace
-./mvnw test
-# TeachingMarketplaceApplicationTests needs Docker (Testcontainers); skipped without it
+## Notes
 
-# Frontend
-cd client
-npm test
-```
-
-## Configuration reference
-
-Do not commit secrets. Use:
-
-- `client/env-config.txt` — frontend variable template
-- `backend/teaching-marketplace/env-config.txt` — backend variable template
-
-`.env` files and `node_modules/` are gitignored.
-
-## License
-
-Private repository — all rights reserved unless otherwise stated.
+- Do not commit `.env` files or secrets.
+- `node_modules` is ignored by git; always run `npm install` after cloning.
+- Backend dependencies are downloaded by Maven when you run `./mvnw` commands.
