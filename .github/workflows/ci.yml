@@ -1,0 +1,39 @@
+# Builds backend and client; runs tests. Backend integration test needs Docker (Testcontainers).
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+          cache: maven
+      - name: Test backend
+        working-directory: backend/teaching-marketplace
+        run: mvn -B verify
+
+  client:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: client/package-lock.json
+      - name: Install and build client
+        working-directory: client
+        run: |
+          npm ci
+          npm run build
+        env:
+          CI: true

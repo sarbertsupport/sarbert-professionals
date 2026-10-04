@@ -1,0 +1,54 @@
+CREATE VIEW teachers_profile_information AS
+SELECT
+    tp.display_name AS fullName,
+    tp.image_path AS image,
+    tp.gender AS gender,
+    ROUND(COALESCE(AVG(r.rating), 0), 1) AS rating,
+    td.total_exp_years AS totalTeachingExperience,
+    td.online_availability AS teachingOnline,
+    td.online_exp_years AS onlineTeachingExperience,
+    td.travel_distance AS travelDistance,
+    CASE
+        WHEN e.end_date IS NULL THEN e.degree_type || ' (' || e.start_date || ' - Present) from ' || e.institution_name
+        ELSE e.degree_type || ' (' || e.start_date || ' - ' || e.end_date || ') from ' || e.institution_name
+    END AS education,
+    CONCAT('$ ', td.min_fee, '-', td.max_fee, '/', td.rate) AS feeDetails,
+    tp.profile_description AS description,
+    tp.location,
+    td.home_availability AS teachesAtHome,
+    td.homework_help AS homeworkHelp,
+    td.payment_details AS paymentDetails,
+    td.travel_willingness AS travelWillingness,
+    subjects.subjects,
+    (
+        SELECT comment
+        FROM ratings
+        WHERE teacher_id = tp.teacher_id
+        ORDER BY rating DESC
+        LIMIT 1
+    ) AS highestRatedReview
+FROM
+    teacher_profiles tp
+LEFT JOIN
+    teaching_details td ON tp.teacher_id = td.teacher_id
+LEFT JOIN
+    education e ON tp.teacher_id = e.teacher_id
+LEFT JOIN
+    (
+        SELECT
+            ts.teacher_id,
+            string_agg(s.subject_name, ', ') AS subjects
+        FROM
+            teacher_subjects ts
+        LEFT JOIN
+            subjects s ON ts.subject_id = s.subject_id
+        GROUP BY
+            ts.teacher_id
+    ) subjects ON tp.teacher_id = subjects.teacher_id
+LEFT JOIN
+    ratings r ON tp.teacher_id = r.teacher_id
+GROUP BY
+    tp.teacher_id, tp.display_name, tp.image_path, tp.gender, td.total_exp_years, td.online_availability,
+    td.online_exp_years, td.travel_distance, e.degree_type, e.start_date, e.end_date, e.institution_name,
+    td.min_fee, td.max_fee, td.rate, tp.profile_description, tp.location, td.home_availability, td.homework_help, 
+    td.payment_details, td.travel_willingness, subjects.subjects;
