@@ -1,0 +1,243 @@
+import React from 'react';
+import {
+  FaBriefcase,
+  FaCheckCircle,
+  FaCalendarAlt,
+  FaHandshake,
+  FaEdit,
+  FaTimes,
+  FaBook,
+  FaClock,
+  FaGraduationCap,
+  FaMoneyBillWave,
+  FaLanguage,
+  FaMapMarkerAlt,
+  FaChevronDown,
+  FaChevronUp,
+  FaEye,
+} from 'react-icons/fa';
+
+export function StudentDashboardJobCard({
+  job,
+  expandedDescriptions,
+  onToggleDescription,
+  onUpdateClick,
+  onCloseClick,
+  onViewMessages,
+  formatJobPostedDate,
+  truncateJobDescription,
+}) {
+  return (
+  <div key={job.jobId} className="bg-white rounded-2xl shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-300 overflow-hidden group">
+    {/* Header with gradient background */}
+    <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 border-b border-gray-100">
+      <div className="flex justify-between items-start">
+        <div className="flex-1">
+          <div className="flex items-center space-x-3 mb-3">
+            <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-xl flex items-center justify-center">
+              <FaBriefcase className="text-white text-lg" />
+            </div>
+            <div>
+              <h2 className="text-xl font-bold text-gray-800">
+                {job.jobCategory} - {job.subjects}
+              </h2>
+              <div className="flex items-center space-x-2 mt-1">
+                <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${
+                  job.jobStatus === 'Open' 
+                    ? 'bg-green-100 text-green-800 border border-green-200' 
+                    : 'bg-gray-100 text-gray-800 border border-gray-200'
+                }`}>
+                  <FaCheckCircle className="mr-1" />
+                  {job.jobStatus}
+                </span>
+                <span className="text-xs text-gray-500 flex items-center">
+                  <FaCalendarAlt className="mr-1" />
+                  {formatJobPostedDate(job.createdAt)}
+                </span>
+              </div>
+            </div>
+          </div>
+          
+          {job.hasActiveConnections && (
+            <div className="flex items-center space-x-2">
+              <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 border border-blue-200">
+                <FaHandshake className="mr-1" />
+                Active Connections
+              </span>
+            </div>
+          )}
+        </div>
+        
+        <div className="flex space-x-2">
+          <button 
+            onClick={() => onUpdateClick(job)}
+            disabled={job.jobStatus === 'Closed'}
+            className={`p-3 rounded-xl transition-all duration-200 ${
+              job.jobStatus === 'Closed'
+                ? 'text-gray-400 cursor-not-allowed'
+                : 'text-blue-600 hover:text-blue-800 hover:bg-blue-50 hover:scale-105'
+            }`}
+            title={job.jobStatus === 'Closed' ? 'Cannot edit closed requirements' : 'Edit'}
+          >
+            <FaEdit className="text-lg" />
+          </button>
+          <button 
+            onClick={() => onCloseClick(job)}
+            disabled={job.jobStatus === 'Closed'}
+            className={`p-3 rounded-xl transition-all duration-200 ${
+              job.jobStatus === 'Closed'
+                ? 'text-gray-400 cursor-not-allowed'
+                : 'text-red-600 hover:text-red-800 hover:bg-red-50 hover:scale-105'
+            }`}
+            title={job.jobStatus === 'Closed' ? 'Requirement already closed' : 'Close'}
+          >
+            <FaTimes className="text-lg" />
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    {/* Content */}
+    <div className="p-6">
+      {/* Requirements Section */}
+      <div className="mb-6">
+        <h3 className="text-sm font-semibold text-gray-700 mb-3 flex items-center">
+          <FaBook className="mr-2 text-blue-500" />
+          Job Requirements
+        </h3>
+        <div className="bg-gray-50 rounded-xl p-4">
+          <p className="text-gray-700 leading-relaxed whitespace-pre-line">
+            {truncateJobDescription(job.jobRequirements, job.jobId, expandedDescriptions)}
+          </p>
+          {job.jobRequirements && job.jobRequirements.length > 200 && (
+            <button
+              onClick={() => onToggleDescription(job.jobId)}
+              className="text-blue-600 hover:text-blue-800 text-sm mt-3 flex items-center font-medium transition-colors"
+            >
+              {expandedDescriptions[job.jobId] ? (
+                <>
+                  <FaChevronUp className="mr-1" /> Show Less
+                </>
+              ) : (
+                <>
+                  <FaChevronDown className="mr-1" /> View More
+                </>
+              )}
+            </button>
+          )}
+        </div>
+      </div>
+      
+      {/* Details Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* Left Column */}
+        <div className="space-y-4">
+          <div className="flex items-center p-3 bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl">
+            <div className="w-10 h-10 rounded-xl bg-blue-500 flex items-center justify-center mr-4">
+              <FaBook className="text-white" />
+            </div>
+            <div>
+              <p className="text-xs text-gray-600 font-medium">Category</p>
+              <p className="text-gray-800 font-semibold">{job.jobCategory}</p>
+            </div>
+          </div>
+          
+          <div className="flex items-center p-3 bg-gradient-to-r from-purple-50 to-purple-100 rounded-xl">
+            <div className="w-10 h-10 rounded-xl bg-purple-500 flex items-center justify-center mr-4">
+              <FaClock className="text-white" />
+            </div>
+            <div>
+              <p className="text-xs text-gray-600 font-medium">Type</p>
+              <p className="text-gray-800 font-semibold">{job.jobType}</p>
+            </div>
+          </div>
+          
+          <div className="flex items-center p-3 bg-gradient-to-r from-green-50 to-green-100 rounded-xl">
+            <div className="w-10 h-10 rounded-xl bg-green-500 flex items-center justify-center mr-4">
+              <FaGraduationCap className="text-white" />
+            </div>
+            <div>
+              <p className="text-xs text-gray-600 font-medium">Level</p>
+              <p className="text-gray-800 font-semibold">{job.level}</p>
+            </div>
+          </div>
+        </div>
+        
+        {/* Right Column */}
+        <div className="space-y-4">
+          <div className="flex items-center p-3 bg-gradient-to-r from-yellow-50 to-yellow-100 rounded-xl">
+            <div className="w-10 h-10 rounded-xl bg-yellow-500 flex items-center justify-center mr-4">
+              <FaMoneyBillWave className="text-white" />
+            </div>
+            <div>
+              <p className="text-xs text-gray-600 font-medium">Budget</p>
+              <p className="text-gray-800 font-semibold">${job.budget} {job.frequency}</p>
+            </div>
+          </div>
+          
+          <div className="flex items-center p-3 bg-gradient-to-r from-red-50 to-red-100 rounded-xl">
+            <div className="w-10 h-10 rounded-xl bg-red-500 flex items-center justify-center mr-4">
+              <FaLanguage className="text-white" />
+            </div>
+            <div>
+              <p className="text-xs text-gray-600 font-medium">Language</p>
+              <p className="text-gray-800 font-semibold">{job.language}</p>
+            </div>
+          </div>
+          
+          <div className="flex items-center p-3 bg-gradient-to-r from-indigo-50 to-indigo-100 rounded-xl">
+            <div className="w-10 h-10 rounded-xl bg-indigo-500 flex items-center justify-center mr-4">
+              <FaMapMarkerAlt className="text-white" />
+            </div>
+            <div>
+              <p className="text-xs text-gray-600 font-medium">Location</p>
+              <p className="text-gray-800 font-semibold">{job.location}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      {/* Enhanced Action Buttons */}
+      <div className="mt-6 space-y-3">
+        {/* Close Job Reminder for Open Jobs */}
+        {job.jobStatus === 'Open' && job.hasActiveConnections && (
+          <div className="bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-xl p-4 mb-4">
+            <div className="flex items-center space-x-3">
+              <div className="w-8 h-8 bg-green-500 rounded-lg flex items-center justify-center">
+                <FaCheckCircle className="text-white text-sm" />
+              </div>
+              <div className="flex-1">
+                <p className="text-sm font-semibold text-green-800">
+                  Satisfied with the assistance?
+                </p>
+                <p className="text-xs text-green-700 mt-1">
+                  Close this job to stop receiving messages and help other students find available professionals.
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <button 
+            className="w-full px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-xl font-medium transition-all duration-200 flex items-center justify-center shadow-lg hover:shadow-xl transform hover:scale-105"
+            onClick={() => onViewMessages(job)}
+          >
+            <FaEye className="mr-2" /> View Messages
+          </button>
+          
+          {job.jobStatus === 'Open' && (
+            <button 
+              onClick={() => onCloseClick(job)}
+              className="w-full px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white rounded-xl font-medium transition-all duration-200 flex items-center justify-center shadow-lg hover:shadow-xl transform hover:scale-105"
+            >
+              <FaCheckCircle className="mr-2" /> Close Job
+            </button>
+          )}
+        </div>
+      </div>
+    </div>
+  </div>
+  );
+}
+

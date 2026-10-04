@@ -1,0 +1,21 @@
+# Handle client-side routing
+/* /index.html 200
+
+# Specific routes for better performance
+/login /index.html 200
+/register /index.html 200
+/forgot-password /index.html 200
+/reset-password* /index.html 200
+/verify-email* /index.html 200
+/admin /index.html 200
+/studentdashboard /index.html 200
+/jobs /index.html 200
+/teachers /index.html 200
+/professionals /index.html 200
+/postjob /index.html 200
+/messages /index.html 200
+/client-messages /index.html 200
+/wallet /index.html 200
+/coins /index.html 200
+/tutors /index.html 200
+/profile-info /index.html 200

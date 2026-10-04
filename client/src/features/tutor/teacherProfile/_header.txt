@@ -1,0 +1,17 @@
+import React, { useState, useEffect } from "react";
+import Footer from '../shared/Footer';
+import { fetchUserProfile } from '../../components/services/authProfile';
+import { fetchTeacherProfile, updateTeacherProfile } from '../../components/services/teacherProfile';
+import { fetchTeacherEducation, updateTeacherEducation, createTeacherEducation } from '../../components/services/teacherEducationProfile';
+import { fetchTeacherExperience, updateTeacherExperience, createTeacherExperience } from "../../components/services/teacherExperienceProfile";
+import { fetchTeachingDetails, updateTeachingDetails } from "../../components/services/teachingDetailsProfile";
+import { fetchSubjectExperience } from "../../components/services/teacherSubjectsProfile";
+import { useAuthStore } from '../../store/useAuthStore';
+import logger from '../../utils/logger';
+import { ProfileEditModal } from './teacherProfile/ProfileEditModal';
+import { EducationEditModal } from './teacherProfile/EducationEditModal';
+import { ExperienceEditModal } from './teacherProfile/ExperienceEditModal';
+import { TeachingDetailsEditModal } from './teacherProfile/TeachingDetailsEditModal';
+import { Section } from './teacherProfile/TeacherProfileSection';
+import { Detail } from './teacherProfile/TeacherProfileDetail';
+

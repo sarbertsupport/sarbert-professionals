@@ -1,0 +1,18 @@
+export const TEACHING_DETAILS_FORM_INITIAL = {
+  userId: null,
+  teacherId: null,
+  rate: '',
+  maxFee: '',
+  minFee: '',
+  paymentDetails: '',
+  totalExpYears: '',
+  onlineExpYears: '',
+  travelWillingness: 'false',
+  travelDistance: '',
+  onlineAvailability: 'false',
+  homeAvailability: 'false',
+  digitalPen: 'false',
+  homeworkHelp: 'false',
+  currentlyEmployed: 'false',
+  workPreference: '',
+};

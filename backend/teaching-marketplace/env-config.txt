@@ -1,0 +1,44 @@
+# Environment Variables for Teaching Marketplace Backend
+# Copy these variables to your .env file or set them in your deployment environment
+
+# Database Configuration
+DATASOURCE_URL=jdbc:postgresql://localhost:5432/teaching_marketplace
+DATASOURCE_USER=postgres
+DATASOURCE_PASSWORD=your_password
+
+# Email Configuration
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+MAIL_USERNAME=your_email@gmail.com
+MAIL_PASSWORD=your_app_password
+
+# Application URLs
+ACCOUNT_VERIFICATION_URL=http://localhost:3000/verify-email
+ACCOUNT_RESET_URL=http://localhost:3000/reset-password
+FRONT_END_URL=http://localhost:3000
+
+# JWT Configuration
+JWT_SECRET=your_jwt_secret_key_here_make_it_long_and_secure
+
+# Cloudinary Configuration
+CLOUDINARY_CLOUD_NAME=your_cloudinary_cloud_name
+CLOUDINARY_API_KEY=your_cloudinary_api_key
+CLOUDINARY_API_SECRET=your_cloudinary_api_secret
+
+# Paystack Configuration (Replace with your actual Paystack credentials)
+PAYSTACK_SECRET_KEY=sk_test_your_paystack_secret_key_here
+PAYSTACK_PUBLIC_KEY=pk_test_your_paystack_public_key_here
+PAYSTACK_WEBHOOK_SECRET=your_paystack_webhook_secret_here
+
+# M-PESA Configuration
+MPESA_CONSUMER_KEY=your_mpesa_consumer_key
+MPESA_CONSUMER_SECRET=your_mpesa_consumer_secret
+MPESA_BUSINESS_SHORT_CODE=your_mpesa_business_short_code
+MPESA_PASSKEY=your_mpesa_passkey
+
+# Instructions:
+# 1. Create a .env file in the backend/teaching-marketplace directory
+# 2. Copy all the variables above to your .env file
+# 3. Replace the placeholder values with your actual credentials
+# 4. For Paystack, get your credentials from: https://dashboard.paystack.com/settings/developer
+# 5. Make sure to use test keys for development and live keys for production 

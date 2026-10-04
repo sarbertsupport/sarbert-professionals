@@ -1,0 +1,20 @@
+# Environment Variables for Teaching Marketplace Frontend
+# Copy these variables to your .env file in the client directory
+
+# API Configuration
+REACT_APP_API_BASE_URL=http://localhost:8089/api/v1
+
+# Paystack Configuration (Replace with your actual Paystack public key)
+REACT_APP_PAYSTACK_PUBLIC_KEY=pk_test_your_paystack_public_key_here
+
+# Application Configuration
+REACT_APP_APP_NAME=Teaching Marketplace
+REACT_APP_VERSION=1.0.0
+
+# Instructions:
+# 1. Create a .env file in the client directory
+# 2. Copy all the variables above to your .env file
+# 3. Replace the placeholder values with your actual credentials
+# 4. For Paystack, get your public key from: https://dashboard.paystack.com/settings/developer
+# 5. Make sure to use test keys for development and live keys for production
+# 6. The REACT_APP_ prefix is required for Create React App to recognize these variables 

@@ -1,0 +1,15 @@
+﻿  const formatDate = (dateArray) => {
+    // Note: month is 0-indexed in JavaScript Date, so we subtract 1 from the month
+    const [year, month, day, hours, minutes, seconds, milliseconds] = dateArray;
+    const date = new Date(year, month - 1, day, hours, minutes, seconds, milliseconds / 1000000);
+    
+    const options = { 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric', 
+        hour: '2-digit', 
+        minute: '2-digit' 
+    };
+    return date.toLocaleDateString(undefined, options);
+};
+

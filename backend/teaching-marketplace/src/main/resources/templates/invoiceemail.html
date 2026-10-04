@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Payment receipt</title>
+    <style type="text/css">
+        @page {
+            size: A4;
+            margin: 14mm 16mm;
+        }
+        html, body {
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: Arial, Helvetica, "Liberation Sans", sans-serif;
+            font-size: 14px;
+            line-height: 1.55;
+            color: #0f172a;
+            background: #ffffff;
+        }
+        .page {
+            max-width: 190mm;
+            margin: 0 auto;
+        }
+        table.layout {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table.layout td {
+            vertical-align: top;
+            padding: 0;
+        }
+        .brand-line {
+            font-size: 19px;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            color: #0f172a;
+            margin: 0 0 2px 0;
+        }
+        .brand-sub {
+            font-size: 12px;
+            color: #64748b;
+            margin: 0 0 10px 0;
+            line-height: 1.45;
+        }
+        .doc-title {
+            font-size: 26px;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            color: #0f172a;
+            margin: 0 0 6px 0;
+        }
+        .badge-paid {
+            display: inline-block;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: #047857;
+            background: #ecfdf5;
+            border: 1px solid #6ee7b7;
+            padding: 5px 12px;
+            margin-bottom: 12px;
+        }
+        .meta-label {
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: #64748b;
+            margin: 0 0 4px 0;
+        }
+        .meta-value {
+            font-size: 15px;
+            font-weight: 600;
+            color: #0f172a;
+            margin: 0 0 12px 0;
+        }
+        .rule-heavy {
+            border: none;
+            border-top: 2px solid #0f172a;
+            margin: 14px 0 16px 0;
+        }
+        .rule-light {
+            border: none;
+            border-top: 1px solid #e2e8f0;
+            margin: 16px 0;
+        }
+        .section-label {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: #475569;
+            margin: 0 0 8px 0;
+            padding-bottom: 4px;
+            border-bottom: 1px solid #cbd5e1;
+        }
+        .party-name {
+            font-size: 15px;
+            font-weight: 700;
+            color: #0f172a;
+            margin: 0 0 6px 0;
+        }
+        .party-line {
+            font-size: 13px;
+            color: #475569;
+            margin: 0 0 5px 0;
+        }
+        .party-line strong {
+            color: #334155;
+            font-weight: 600;
+        }
+        .items-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 4px;
+        }
+        .items-table th {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #64748b;
+            text-align: left;
+            padding: 10px 8px;
+            border-bottom: 2px solid #0f172a;
+        }
+        .items-table th.amt {
+            text-align: right;
+        }
+        .items-table td {
+            font-size: 13px;
+            color: #334155;
+            padding: 12px 8px;
+            border-bottom: 1px solid #e2e8f0;
+            vertical-align: top;
+        }
+        .items-table td.amt {
+            text-align: right;
+            font-weight: 600;
+            font-variant-numeric: tabular-nums;
+            color: #0f172a;
+        }
+        .items-table tr.fee-row td {
+            font-size: 12px;
+            color: #64748b;
+        }
+        .totals-wrap {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 6px;
+        }
+        .totals-wrap td {
+            padding: 8px;
+            vertical-align: middle;
+        }
+        .total-label {
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: #64748b;
+            text-align: right;
+        }
+        .total-value {
+            font-size: 18px;
+            font-weight: 700;
+            font-variant-numeric: tabular-nums;
+            color: #0f172a;
+            text-align: right;
+            border-top: 2px solid #0f172a;
+            padding-top: 10px;
+        }
+        .legal-note {
+            font-size: 11px;
+            line-height: 1.55;
+            color: #64748b;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            padding: 12px 14px;
+            margin: 18px 0 0 0;
+        }
+        .legal-note strong {
+            color: #334155;
+        }
+        .footer {
+            margin-top: 22px;
+            padding-top: 14px;
+            border-top: 1px solid #e2e8f0;
+            font-size: 11px;
+            line-height: 1.65;
+            color: #94a3b8;
+            text-align: center;
+        }
+        .footer a {
+            color: #475569;
+            text-decoration: none;
+        }
+        .mono {
+            font-family: Consolas, "Courier New", monospace;
+            font-size: 13px;
+            color: #475569;
+            word-break: break-all;
+        }
+        .payment-method-value {
+            font-size: 16px;
+            font-weight: 700;
+            color: #0f172a;
+            margin: 0 0 14px 0;
+        }
+    </style>
+</head>
+<body>
+<div class="page"
+     th:with="issuer=${(businessName != null and !#strings.isEmpty(#strings.trim(businessName)))} ? ${businessName} : 'SkillBridge'">
+    <!-- Header -->
+    <table class="layout" cellpadding="0" cellspacing="0">
+        <tr>
+            <td width="56%">
+                <p class="brand-line" th:text="${issuer}">SkillBridge</p>
+                <p class="brand-sub" th:if="${businessDescription != null and !#strings.isEmpty(#strings.trim(businessDescription))}"
+                   th:text="${businessDescription}">Platform description</p>
+                <p class="party-line" style="margin-top:8px;" th:text="${businessAddress}">Address</p>
+                <p class="party-line" th:if="${businessContactPerson != null and !#strings.isEmpty(#strings.trim(businessContactPerson))}">
+                    <strong>Attn:</strong> <span th:text="${businessContactPerson}"></span>
+                </p>
+                <p class="party-line" th:if="${businessTaxId != null and !#strings.isEmpty(#strings.trim(businessTaxId))}">
+                    <strong>Tax / VAT ID:</strong> <span th:text="${businessTaxId}"></span>
+                </p>
+                <p class="party-line" th:if="${businessRegistrationNumber != null and !#strings.isEmpty(#strings.trim(businessRegistrationNumber))}">
+                    <strong>Registration no.:</strong> <span th:text="${businessRegistrationNumber}"></span>
+                </p>
+                <p class="party-line" th:if="${businessWebsite != null and !#strings.isEmpty(#strings.trim(businessWebsite))}">
+                    <strong>Web:</strong> <span th:text="${businessWebsite}"></span>
+                </p>
+            </td>
+            <td width="44%" align="right">
+                <p class="doc-title">RECEIPT</p>
+                <p><span class="badge-paid">Payment received</span></p>
+                <p class="meta-label">Receipt number</p>
+                <p class="meta-value" th:text="${invoiceNumber}">0</p>
+                <p class="meta-label">Date issued</p>
+                <p class="meta-value"
+                   th:text="${formattedDate != null} ? ${formattedDate} : ${#temporals.format(transactionDate, 'MMM dd, yyyy HH:mm')}">—</p>
+            </td>
+        </tr>
+    </table>
+
+    <hr class="rule-heavy"/>
+
+    <!-- Bill to + payment meta -->
+    <table class="layout" cellpadding="0" cellspacing="0">
+        <tr>
+            <td width="50%" style="padding-right: 20px;">
+                <p class="section-label">Bill to</p>
+                <p class="party-name"
+                   th:text="${customerName != null and !#strings.isEmpty(#strings.trim(customerName))} ? ${customerName} : 'Customer'">Customer</p>
+                <p class="party-line" th:if="${customerEmail != null and !#strings.isEmpty(#strings.trim(customerEmail))}"
+                   th:text="${customerEmail}"></p>
+                <p class="party-line" th:text="${customerAddress}"></p>
+                <p class="party-line" th:if="${customerPhone != null and !#strings.isEmpty(#strings.trim(customerPhone))}">
+                    <strong>Tel:</strong> <span th:text="${customerPhone}"></span>
+                </p>
+            </td>
+            <td width="50%">
+                <p class="section-label">Payment details</p>
+                <p class="meta-label">Payment method</p>
+                <p class="payment-method-value" th:text="${paymentMethodLabel}">—</p>
+                <p class="meta-label"
+                   th:text="${paymentMethod != null and #strings.equalsIgnoreCase(paymentMethod, 'MPESA')} ? 'M-Pesa receipt no.' : 'Transaction ID'">
+                    Transaction ID
+                </p>
+                <p class="mono" style="margin:0 0 14px 0;" th:text="${transactionId}">—</p>
+                <p class="party-line" style="margin-top:6px;" th:if="${paymentReference != null and !#strings.isEmpty(#strings.trim(paymentReference))}">
+                    <strong>Paystack payment ID</strong>
+                </p>
+                <p class="mono" th:if="${paymentReference != null and !#strings.isEmpty(#strings.trim(paymentReference))}"
+                   th:text="${paymentReference}">—</p>
+            </td>
+        </tr>
+    </table>
+
+    <hr class="rule-light"/>
+
+    <!-- Line items -->
+    <p class="section-label">Charges</p>
+    <table class="items-table" cellpadding="0" cellspacing="0">
+        <thead>
+        <tr>
+            <th width="52%">Description</th>
+            <th width="20%">Quantity</th>
+            <th width="28%" class="amt">Amount</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td th:text="${description}">Coin purchase</td>
+            <td th:text="|${coinsBought} coins|">0 coins</td>
+            <td class="amt">
+                <span th:text="${paymentAmountDisplay}">0.00</span>
+                <span th:text="' ' + ${currency}"> USD</span>
+            </td>
+        </tr>
+        <tr class="fee-row" th:if="${transactionFeeDisplay != null and transactionFeeDisplay != '0.00'}">
+            <td colspan="2">Fees and adjustments</td>
+            <td class="amt">
+                <span th:text="${transactionFeeDisplay}">0.00</span>
+                <span th:text="' ' + ${currency}"></span>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <table class="totals-wrap" cellpadding="0" cellspacing="0">
+        <tr>
+            <td width="62%"></td>
+            <td width="18%" class="total-label">Total paid</td>
+            <td width="20%" class="total-value">
+                <span th:text="${totalAmountDisplay}">0.00</span>
+                <span th:text="' ' + ${currency}"></span>
+            </td>
+        </tr>
+    </table>
+
+    <div class="legal-note">
+        <strong>Official receipt.</strong> This document confirms payment received for the goods or services described above.
+        Retain this receipt for your financial records. Amounts are shown in the stated currency. If any detail appears
+        incorrect, contact the issuer using the details shown at the top of this receipt.
+    </div>
+
+    <div class="footer">
+        <p style="margin:0 0 6px 0;">Thank you for your business.</p>
+        <p style="margin:0;" th:if="${businessEmail != null and !#strings.isEmpty(#strings.trim(businessEmail))}">
+            Billing enquiries:
+            <span th:text="${businessEmail}">support@example.com</span>
+            <span th:if="${businessPhone != null and !#strings.isEmpty(#strings.trim(businessPhone))}">
+                · <span th:text="${businessPhone}"></span>
+            </span>
+        </p>
+        <p style="margin:10px 0 0 0;"
+           th:text="|© ${#temporals.format(transactionDate, 'yyyy')} ${issuer}. All rights reserved.|"></p>
+    </div>
+</div>
+</body>
+</html>

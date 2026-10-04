@@ -1,0 +1,284 @@
+import React, { useState } from 'react';
+import { formatDateForInput } from './formatDateForInput';
+
+export const ExperienceEditModal = ({ experience, onClose, onSave, currentExperienceIndex, saveLoading }) => {
+  const [formData, setFormData] = useState({
+    organizationName: experience.organizationName || "",
+    organizationUrl: experience.organizationUrl || "",
+    designation: experience.designation || "",
+    startDate: formatDateForInput(experience.startDate),
+    endDate: experience.currentJob ? "" : formatDateForInput(experience.endDate),
+    association: experience.association || "Full-time",
+    jobDescription: experience.jobDescription || "",
+    skills: experience.skills ? [...experience.skills] : [],
+    currentJob: experience.currentJob || false
+  });
+
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    
+    if (name === 'currentJob') {
+      setFormData(prev => ({ 
+        ...prev, 
+        [name]: checked,
+        endDate: checked ? "" : prev.endDate // Clear endDate when currentJob is checked
+      }));
+    } else {
+      setFormData(prev => ({ 
+        ...prev, 
+        [name]: type === 'checkbox' ? checked : value 
+      }));
+    }
+  };
+
+  const handleSkillsChange = (e, index) => {
+    const newSkills = [...formData.skills];
+    newSkills[index] = e.target.value;
+    setFormData(prev => ({ ...prev, skills: newSkills }));
+  };
+
+  const addSkill = () => {
+    setFormData(prev => ({ ...prev, skills: [...prev.skills, ''] }));
+  };
+
+  const removeSkill = (index) => {
+    const newSkills = formData.skills.filter((_, i) => i !== index);
+    setFormData(prev => ({ ...prev, skills: newSkills }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onSave(formData);
+  };
+
+  return (
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+      <div className="bg-white/95 backdrop-blur-md rounded-3xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto border border-white/20">
+        {/* Modern Header */}
+        <div className="bg-gradient-to-r from-green-500 to-emerald-500 rounded-t-3xl p-6 text-white">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center">
+              <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center mr-4">
+                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+              </div>
+              <div>
+                <h2 className="text-2xl font-bold">
+                  {currentExperienceIndex !== null ? "Edit Experience" : "Add New Experience"}
+                </h2>
+                <p className="text-green-100 text-sm">Update your professional experience</p>
+              </div>
+            </div>
+            <button
+              onClick={onClose}
+              className="text-white/70 hover:text-white transition-colors p-2 rounded-xl hover:bg-white/10"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        {/* Form Content */}
+        <div className="p-8">
+          <form onSubmit={handleSubmit}>
+            <div className="space-y-6">
+              {/* Organization Name Field */}
+              <div className="group">
+                <label className="block text-sm font-semibold text-gray-700 mb-2 flex items-center">
+                  <svg className="w-4 h-4 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                  </svg>
+                  Organization Name*
+                </label>
+                <input
+                  type="text"
+                  name="organizationName"
+                  value={formData.organizationName}
+                  onChange={handleChange}
+                  placeholder="Enter organization name"
+                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-200 bg-white/80 backdrop-blur-sm"
+                  required
+                />
+              </div>
+
+              {/* Designation Field */}
+              <div className="group">
+                <label className="block text-sm font-semibold text-gray-700 mb-2 flex items-center">
+                  <svg className="w-4 h-4 mr-2 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                  </svg>
+                  Designation*
+                </label>
+                <input
+                  type="text"
+                  name="designation"
+                  value={formData.designation}
+                  onChange={handleChange}
+                  placeholder="Enter your job title"
+                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all duration-200 bg-white/80 backdrop-blur-sm"
+                  required
+                />
+              </div>
+
+              {/* Date Fields */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="group">
+                  <label className="block text-sm font-semibold text-gray-700 mb-2 flex items-center">
+                    <svg className="w-4 h-4 mr-2 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                    Start Date*
+                  </label>
+                  <input
+                    type="date"
+                    name="startDate"
+                    value={formData.startDate}
+                    onChange={handleChange}
+                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-white/80 backdrop-blur-sm"
+                    required
+                  />
+                </div>
+                <div className="group">
+                  <label className="block text-sm font-semibold text-gray-700 mb-2 flex items-center">
+                    <svg className="w-4 h-4 mr-2 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                    End Date*
+                  </label>
+                  <input
+                    type="date"
+                    name="endDate"
+                    value={formData.endDate}
+                    onChange={handleChange}
+                    className={`w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-white/80 backdrop-blur-sm ${
+                      formData.currentJob ? 'bg-gray-100 cursor-not-allowed' : ''
+                    }`}
+                    disabled={formData.currentJob}
+                    required={!formData.currentJob}
+                  />
+                </div>
+              </div>
+
+              {/* Current Job Checkbox */}
+              <div className="flex items-center p-4 bg-green-50 rounded-xl border border-green-200">
+                <input
+                  type="checkbox"
+                  name="currentJob"
+                  checked={formData.currentJob}
+                  onChange={handleChange}
+                  className="h-5 w-5 text-green-600 focus:ring-green-500 border-gray-300 rounded"
+                  id="currentJobCheckbox"
+                />
+                <label htmlFor="currentJobCheckbox" className="ml-3 block text-sm font-semibold text-gray-700">
+                  This is my current job
+                </label>
+              </div>
+
+              {/* Job Description Field */}
+              <div className="group">
+                <label className="block text-sm font-semibold text-gray-700 mb-2 flex items-center">
+                  <svg className="w-4 h-4 mr-2 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
+                  Job Description
+                </label>
+                <textarea
+                  name="jobDescription"
+                  value={formData.jobDescription}
+                  onChange={handleChange}
+                  rows={4}
+                  placeholder="Describe your responsibilities and achievements..."
+                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 bg-white/80 backdrop-blur-sm resize-none"
+                />
+              </div>
+
+              {/* Skills Section */}
+              <div className="group">
+                <label className="block text-sm font-semibold text-gray-700 mb-3 flex items-center">
+                  <svg className="w-4 h-4 mr-2 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                  </svg>
+                  Skills
+                </label>
+                
+                {formData.skills.length > 0 ? (
+                  <div className="space-y-3">
+                    {formData.skills.map((skill, index) => (
+                      <div key={index} className="flex items-center">
+                        <input
+                          type="text"
+                          value={skill}
+                          onChange={(e) => handleSkillsChange(e, index)}
+                          placeholder="Enter a skill"
+                          className="flex-grow px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-200 bg-white/80 backdrop-blur-sm"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => removeSkill(index)}
+                          className="ml-3 p-2 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-xl transition-all duration-200"
+                          aria-label="Remove skill"
+                        >
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                          </svg>
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-sm text-gray-500 italic">No skills added yet</p>
+                )}
+                
+                <button
+                  type="button"
+                  onClick={addSkill}
+                  className="mt-3 inline-flex items-center px-4 py-2 bg-gradient-to-r from-orange-100 to-red-100 text-orange-700 rounded-xl font-semibold hover:from-orange-200 hover:to-red-200 transition-all duration-200 border border-orange-200"
+                >
+                  <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                  </svg>
+                  Add Skill
+                </button>
+              </div>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="mt-8 flex justify-end space-x-4">
+              <button
+                type="button"
+                onClick={onClose}
+                className="px-6 py-3 text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-xl font-semibold transition-all duration-200 transform hover:scale-105"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                disabled={saveLoading}
+                className={`px-6 py-3 rounded-xl font-semibold transition-all duration-200 transform hover:scale-105 ${
+                  saveLoading 
+                    ? 'bg-gray-300 text-gray-500 cursor-not-allowed' 
+                    : 'bg-gradient-to-r from-green-500 to-emerald-500 text-white hover:from-green-600 hover:to-emerald-600 shadow-lg hover:shadow-xl'
+                }`}
+              >
+                {saveLoading ? (
+                  <div className="flex items-center">
+                    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Saving...
+                  </div>
+                ) : (
+                  currentExperienceIndex !== null ? "Update Experience" : "Add Experience"
+                )}
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  );
+};

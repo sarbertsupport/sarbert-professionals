@@ -1,0 +1,246 @@
+.container {
+    font-family: Arial, sans-serif;
+    color: #333;
+    background-color: #fff;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .header {
+    background-color: #f0f0f0;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .header .left,
+  .header .right {
+    display: flex;
+    align-items: center;
+  }
+  
+  .header .left a,
+  .header .right a {
+    margin-right: 10px;
+    text-decoration: none;
+  }
+  
+  .header .left a.icon-back,
+  .header .right a.icon-search,
+  .header .right a.icon-star,
+  .header .right a.icon-error {
+    width: 24px;
+    height: 24px;
+    background-size: cover;
+  }
+  
+  .header .left a.icon-back {
+    background-image: url('https://teacheron.com/images/icon-back.png');
+  }
+  
+  .header .left a.icon-refresh {
+    background-image: url('https://teacheron.com/images/icon-refresh.png');
+  }
+  
+  .header .left a.icon-settings {
+    background-image: url('https://teacheron.com/images/icon-settings.png');
+  }
+  
+  .header .right a.icon-search {
+    background-image: url('https://teacheron.com/images/icon-search.png');
+  }
+  
+  .header .right a.icon-star {
+    background-image: url('https://teacheron.com/images/icon-star.png');
+  }
+  
+  .header .right a.icon-error {
+    background-image: url('https://teacheron.com/images/icon-error.png');
+  }
+  
+  .header .title {
+    font-weight: bold;
+  }
+  
+  .content {
+    padding: 20px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .logo {
+    margin-bottom: 20px;
+  }
+  
+  .logo img {
+    width: 150px;
+    height: auto;
+  }
+  
+  .profile {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  
+  .profile .messages,
+  .profile .user {
+    display: flex;
+    align-items: center;
+  }
+  
+  .profile .messages .badge {
+    background-color: red;
+    color: #fff;
+    border-radius: 50%;
+    padding: 2px 5px;
+    margin-right: 5px;
+  }
+  
+  .profile .user img {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin-right: 5px;
+  }
+  
+  .actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+  }
+  
+  .navigation {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  
+  .navigation .item {
+    display: flex;
+    align-items: center;
+  }
+  
+  .navigation .item button {
+    padding: 8px 15px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .navigation .item .dropdown {
+    position: relative;
+    cursor: pointer;
+  }
+  
+  .navigation .item .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    width: 120px;
+    padding: 10px;
+  }
+  
+  .navigation .item .dropdown-content a {
+    color: #333;
+    padding: 8px 15px;
+    text-decoration: none;
+    display: block;
+  }
+  
+  .navigation .item .dropdown-content a:hover {
+    background-color: #e9e9e9;
+  }
+  
+  .navigation .item .dropdown:hover .dropdown-content {
+    display: block;
+  }
+  
+  .navigation .item button.primary {
+    background-color: #4CAF50;
+    color: #fff;
+  }
+  
+  .navigation .item button.secondary {
+    background-color: #f0f0f0;
+    color: #333;
+  }
+  
+  .my-requirements {
+    margin-bottom: 20px;
+  }
+  
+  .my-requirements .requirement {
+    border: 1px solid #ccc;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+  }
+  
+  .my-requirements .requirement h3 {
+    margin-bottom: 10px;
+  }
+  
+  .my-requirements .requirement p {
+    margin-bottom: 15px;
+  }
+  
+  .my-requirements .requirement .details {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+  }
+  
+  .my-requirements .requirement .details .rate,
+  .my-requirements .requirement .details .location {
+    display: flex;
+    align-items: center;
+  }
+  
+  .my-requirements .requirement .details .location img {
+    width: 16px;
+    height: 16px;
+    margin-right: 5px;
+  }
+  
+  .my-requirements .requirement .actions {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .my-requirements .requirement .actions button {
+    padding: 8px 15px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .my-requirements .requirement .actions button.primary {
+    background-color: #4CAF50;
+    color: #fff;
+  }
+  
+  .my-requirements .requirement .actions button.secondary {
+    background-color: #f0f0f0;
+    color: #333;
+  }
+  
+  .my-requirements .requirement .actions button.tertiary {
+    background-color: #ccc;
+    color: #333;
+  }
+  
+  .my-requirements button.primary {
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    background-color: #4CAF50;
+    color: #fff;
+  }
