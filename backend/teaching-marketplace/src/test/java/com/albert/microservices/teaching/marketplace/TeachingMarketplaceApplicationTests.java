@@ -18,7 +18,7 @@ class TeachingMarketplaceApplicationTests {
 	static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:16-alpine");
 
 	@DynamicPropertySource
-	static void registerR2dbc(DynamicPropertyRegistry registry) {
+	static void registerDatasource(DynamicPropertyRegistry registry) {
 		registry.add("spring.r2dbc.url", () -> String.format(
 				"r2dbc:postgresql://%s:%d/%s",
 				postgres.getHost(),
@@ -26,6 +26,14 @@ class TeachingMarketplaceApplicationTests {
 				postgres.getDatabaseName()));
 		registry.add("spring.r2dbc.username", postgres::getUsername);
 		registry.add("spring.r2dbc.password", postgres::getPassword);
+
+		// Flyway uses JDBC
+		registry.add("spring.datasource.url", postgres::getJdbcUrl);
+		registry.add("spring.datasource.username", postgres::getUsername);
+		registry.add("spring.datasource.password", postgres::getPassword);
+		registry.add("spring.flyway.url", postgres::getJdbcUrl);
+		registry.add("spring.flyway.user", postgres::getUsername);
+		registry.add("spring.flyway.password", postgres::getPassword);
 	}
 
 	@Test

@@ -26,7 +26,8 @@ Install these first:
 - PostgreSQL
 - Maven wrapper is already included in the backend folder (`mvnw` / `mvnw.cmd`)
 
-Also create a PostgreSQL database (for example `teaching_marketplace`).
+Also create an empty PostgreSQL database (for example `teaching_marketplace`).  
+Do not create tables manually — Flyway migrations create them automatically when the backend starts.
 
 ---
 
@@ -51,12 +52,14 @@ Start the API:
 .\mvnw.cmd spring-boot:run
 ```
 
+On startup, Flyway runs SQL migrations from `backend/teaching-marketplace/src/main/resources/db/migration`  
+and creates/updates all required tables, indexes, views, and seed roles.
+
 Backend URL:
 
 ```text
 http://localhost:8089/api/v1
 ```
-
 ---
 
 ### 2. Run the frontend

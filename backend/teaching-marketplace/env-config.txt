@@ -1,8 +1,11 @@
 # Environment Variables for Teaching Marketplace Backend
-# Copy these variables to your .env file or set them in your deployment environment
+# Copy these variables into your shell environment or deployment config.
 
 # Database Configuration
-DATASOURCE_URL=jdbc:postgresql://localhost:5432/teaching_marketplace
+# Either jdbc: or r2dbc: is accepted for DATASOURCE_URL.
+# Flyway uses JDBC automatically (derived if you only set one URL).
+DATASOURCE_URL=r2dbc:postgresql://localhost:5432/teaching_marketplace
+DATASOURCE_JDBC_URL=jdbc:postgresql://localhost:5432/teaching_marketplace
 DATASOURCE_USER=postgres
 DATASOURCE_PASSWORD=your_password
 
@@ -25,20 +28,21 @@ CLOUDINARY_CLOUD_NAME=your_cloudinary_cloud_name
 CLOUDINARY_API_KEY=your_cloudinary_api_key
 CLOUDINARY_API_SECRET=your_cloudinary_api_secret
 
-# Paystack Configuration (Replace with your actual Paystack credentials)
+# Paystack Configuration
 PAYSTACK_SECRET_KEY=sk_test_your_paystack_secret_key_here
 PAYSTACK_PUBLIC_KEY=pk_test_your_paystack_public_key_here
 PAYSTACK_WEBHOOK_SECRET=your_paystack_webhook_secret_here
+PAYSTACK_CALLBACK_URL=http://localhost:3000/payment/success
 
 # M-PESA Configuration
 MPESA_CONSUMER_KEY=your_mpesa_consumer_key
 MPESA_CONSUMER_SECRET=your_mpesa_consumer_secret
 MPESA_BUSINESS_SHORT_CODE=your_mpesa_business_short_code
 MPESA_PASSKEY=your_mpesa_passkey
+MPESA_TRANSACTION_TYPE=CustomerPayBillOnline
 
 # Instructions:
-# 1. Create a .env file in the backend/teaching-marketplace directory
-# 2. Copy all the variables above to your .env file
-# 3. Replace the placeholder values with your actual credentials
-# 4. For Paystack, get your credentials from: https://dashboard.paystack.com/settings/developer
-# 5. Make sure to use test keys for development and live keys for production 
+# 1. Create an empty PostgreSQL database (example name: teaching_marketplace)
+# 2. Set the variables above in your environment
+# 3. Start the backend — Flyway runs migrations automatically and creates all tables
+# 4. Do not create tables manually
