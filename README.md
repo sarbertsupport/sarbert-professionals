@@ -1,70 +1,57 @@
 ﻿# Sarbert Professionals
 
-Sarbert Professionals is a teaching marketplace where students can find tutors, post teaching jobs, chat, book sessions, and pay using coins. Tutors create profiles, apply for jobs, and manage their availability and wallet. Admins oversee the platform, including support and payments.
+## What this project is about
 
-The project has two main parts:
+Sarbert Professionals is a teaching marketplace that connects students with tutors.
+
+- **Students** can post teaching jobs, chat with tutors, book sessions, and pay using coins.
+- **Tutors** can create profiles, apply for jobs, set availability, and manage their wallet.
+- **Admins** manage the platform, including support and payment-related operations.
+
+The codebase has two parts:
 
 - `client` — React frontend
-- `backend/teaching-marketplace` — Spring Boot API (Java 17, PostgreSQL)
+- `backend/teaching-marketplace` — Spring Boot backend API (Java 17, PostgreSQL)
 
 ---
 
-## Prerequisites
+## How to run it locally
 
-Before running the project, install:
+### Prerequisites
+
+Install these first:
 
 - Node.js and npm
 - Java 17
-- Maven (or use the Maven wrapper in the backend folder)
 - PostgreSQL
+- Maven wrapper is already included in the backend folder (`mvnw` / `mvnw.cmd`)
 
-Create a PostgreSQL database named `teaching_marketplace` (or match the name in your backend config).
+Also create a PostgreSQL database (for example `teaching_marketplace`).
 
 ---
 
-## Backend setup
-
-### 1. Install dependencies
-
-```bash
-cd backend/teaching-marketplace
-./mvnw dependency:resolve
-```
-
-On Windows PowerShell:
+### 1. Run the backend
 
 ```powershell
 cd backend/teaching-marketplace
+```
+
+Install backend libraries:
+
+```powershell
 .\mvnw.cmd dependency:resolve
 ```
 
-### 2. Configure environment
+Configure the backend using `backend/teaching-marketplace/env-config.txt`  
+(set database credentials, JWT secret, frontend URL, and any payment/email keys you need).
 
-Copy the variables from `backend/teaching-marketplace/env-config.txt` into your environment (or a local env file used by your setup).
-
-You need at least:
-
-- Database URL, username, and password
-- JWT secret
-- Frontend URL
-- Email (SMTP) settings if you use verification/reset emails
-- Paystack, M-Pesa, and Cloudinary values if you use those features
-
-### 3. Run the backend
-
-```bash
-cd backend/teaching-marketplace
-./mvnw spring-boot:run
-```
-
-On Windows PowerShell:
+Start the API:
 
 ```powershell
-cd backend/teaching-marketplace
 .\mvnw.cmd spring-boot:run
 ```
 
-The API runs on port `8089` by default:
+Backend URL:
 
 ```text
 http://localhost:8089/api/v1
@@ -72,20 +59,21 @@ http://localhost:8089/api/v1
 
 ---
 
-## Frontend setup
+### 2. Run the frontend
 
-### 1. Install libraries
+Open a new terminal:
 
-```bash
+```powershell
 cd client
+```
+
+Install frontend libraries:
+
+```powershell
 npm install
 ```
 
-### 2. Configure environment
-
-Create a `.env` file in the `client` folder using the values from `client/env-config.txt`.
-
-Minimum example:
+Create a `.env` file in `client` based on `client/env-config.txt`. Example:
 
 ```env
 REACT_APP_API_BASE_URL=http://localhost:8089/api/v1
@@ -94,39 +82,31 @@ REACT_APP_APP_NAME=Teaching Marketplace
 REACT_APP_VERSION=1.0.0
 ```
 
-### 3. Run the frontend
+Start the frontend:
 
-```bash
-cd client
+```powershell
 npm start
 ```
 
-The app runs on:
+Frontend URL:
 
 ```text
 http://localhost:3000
 ```
 
-### 4. Production build (optional)
-
-```bash
-cd client
-npm run build
-```
-
 ---
 
-## Suggested local order
+### Local startup order
 
-1. Start PostgreSQL and make sure the database exists.
+1. Start PostgreSQL and confirm the database exists.
 2. Start the backend.
 3. Start the frontend.
-4. Open the frontend in your browser.
+4. Open `http://localhost:3000` in your browser.
 
 ---
 
 ## Notes
 
 - Do not commit `.env` files or secrets.
-- `node_modules` is ignored by git; always run `npm install` after cloning.
-- Backend dependencies are downloaded by Maven when you run `./mvnw` commands.
+- After cloning, run `npm install` in `client` before starting the frontend.
+- Backend dependencies are downloaded automatically by Maven when you run `.\mvnw.cmd` commands.
